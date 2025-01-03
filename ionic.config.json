@@ -1,0 +1,7 @@
+{
+  "name": "fastMessage",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
