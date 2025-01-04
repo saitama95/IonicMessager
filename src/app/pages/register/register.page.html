@@ -6,7 +6,9 @@
         <ion-card>
           <ion-card-header>
             <ion-card-title>Register</ion-card-title>
-            <p style="color:red;margin: 0;" *ngIf="loginError">Email exit</p>
+              <p style="margin: 0;color: red;" *ngIf="loginError">
+                {{loginError}}
+              </p>
           </ion-card-header>
           <form [formGroup]="regsiterForm" (ngSubmit)="register()">
             <ion-list>
