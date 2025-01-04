@@ -34,4 +34,51 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+//@import "@ionic/angular/css/palettes/dark.system.css";
+
+.text_center{
+    text-align: center;
+}
+.mt-130{
+    margin-top: 130px;
+}
+.p0{
+    padding: 0;
+}
+.hfull{
+    height: 100%;
+}
+.dflex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.my-5{
+    margin: 5px 0;
+}
+.container{
+    padding: 10px;
+ }
+ ion-card-title,.btn, .register{
+     text-align: center;
+ }
+ ion-button{
+     margin: 0 auto;
+ }
+ .btn{
+     margin-top: 10px;
+ }
+ ion-card{
+    padding-bottom: 10px;
+ }
+ .loginbtn{
+    --background: var(--second_col);
+}
+.logtitle{
+    color: var(--primary_col);
+    text-align: center;
+    font-weight: 600;
+}
+.redirectbtn{
+    --background: var(--primary_col);
+}
