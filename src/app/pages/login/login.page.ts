@@ -3,6 +3,7 @@ import { FormBuilder, Validators,FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, NavController, Platform } from '@ionic/angular';
 import { HttpService } from 'src/app/services/http.service';
+import { StateService } from 'src/app/services/state.service';
 import { StorageService } from 'src/app/services/storage.service';
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginPage implements OnInit {
     private platform: Platform,
     private http:HttpService,
     private alertController: AlertController,
-    private storage:StorageService
+    private storage:StorageService,
+    private stateMange:StateService
   ) { 
     this.platform.backButton.subscribeWithPriority(10, () => {
       this.confirmExit();
@@ -34,16 +36,22 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    this.checkLogin();
+    
   }
 
-  checkLogin(){
-  }
+  
  
   login(){
       this.http.postHttp("http://127.0.0.1:8000/api/login",this.loginForm.value)
-      .subscribe((res:any)=>{
-        this.storage.set("login",res);
+      .subscribe({
+        next:(res:any)=>{
+          this.storage.set("login",res);
+          this.stateMange.tokenState$.next(res);
+          this.router.navigate(["/home"]);
+        },
+        error:(e)=>{
+          this.loginError=true;
+        }
       })
   }
 

@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2">
+        <ion-icon class="backbtn" name="return-down-back-outline" (click)="back()"></ion-icon>
+      </ion-col>
+      <ion-col size="10" class="p0 dflex" 
+          style="justify-content:start;gap: 8px;">
+        <div class="userphoto">
+          <ion-img [src]="profileImage" *ngIf="profileImage  else noImage"></ion-img>
+          <ng-template #noImage>
+            <ion-img src="assets/userprofile.png"
+            ></ion-img>
+          </ng-template>
+        </div>
+        <div>
+          <p class="m0">{{profileName}}</p>
+          <span>Online</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col size="12" *ngFor="let item of allMessages;let index">
+      <div class="messageCard" 
+        [ngClass]="item.sender_id==sender_id ? 'senderSide':'receiverSide'">
+        <p class="m0">{{item.message}}</p>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-infinite-scroll (ionInfinite)="loadMessages($event)" position="top">
+    <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  
+</ion-content>
+
+<ion-footer>
+  <ion-row>
+    <ion-col size="10">
+      <ion-input
+      placeholder="Send Message..."
+      [(ngModel)]="textMessage"
+      ></ion-input>
+    </ion-col>
+    <ion-col size="2" class="dflex" (click)="sendMessage()">
+      <ion-icon name="navigate-circle-outline" 
+      class="sendIcons"></ion-icon>
+    </ion-col>
+  </ion-row>
+</ion-footer>

@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="4">
+        <ion-icon class="backbtn" name="return-down-back-outline" (click)="back()"></ion-icon>
+      </ion-col>
+      <ion-col size="8">
+        <ion-title size="large">Profile</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row  class="mt-10" *ngIf="userDetails else loading">
+    <ion-col size="12" class="dflex lr">
+      <ion-img [src]="image" class="profile_img" *ngIf="image else noImage"></ion-img>
+        <ng-template #noImage>
+          <ion-img src="assets/userprofile.png" class="profile_img"></ion-img>
+        </ng-template>
+      <label for="selectfile">Edit</label>
+      <input type="file"  accept="image/*" style="display: none;" id="selectfile" 
+      (change)="selectFile($event)">
+    </ion-col>
+    <ion-col size="12">
+      <ion-list >
+        <ion-item>
+          <ion-label>Name</ion-label>
+          <p>{{userDetails.name}}</p>
+        </ion-item>
+        <ion-item>
+          <ion-label>Email</ion-label>
+          <p>{{userDetails.email}}</p>
+        </ion-item>
+        <ion-item>
+          <ion-label>Created At</ion-label>
+          <p>{{userDetails.created_at}}</p>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+ 
+  <ng-template #loading>
+    <div style="height: 400px;" class="dflex">
+      <ion-spinner name="lines-sharp"></ion-spinner>
+    </div>
+  </ng-template>
+ 
+</ion-content>

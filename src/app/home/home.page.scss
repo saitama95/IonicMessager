@@ -25,3 +25,26 @@
 #container a {
   text-decoration: none;
 }
+.text_end{
+  ion-icon{
+    font-size: 25px;
+  }
+}
+.userCard{
+  border-bottom:1px solid grey;
+  height: 50px;
+  display: flex;
+  gap: 10px;
+  p{
+    font-size: 18px;
+  }
+  .img{
+    width: 45px;
+    height: 45px;
+  }
+  ion-img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+}

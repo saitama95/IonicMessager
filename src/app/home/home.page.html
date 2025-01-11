@@ -1,31 +1,50 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Home
-    </ion-title>
+    <ion-row>
+      <ion-col size="6">
+          <h3 class="m0 pl-5">FastMessage</h3>
+      </ion-col>
+      <ion-col size="6">
+        <ion-title class="text_end" aria-hidden="true">
+          <ion-icon name="person-outline" id="trigger-button"></ion-icon>
+          <ion-popover trigger="trigger-button" 
+          [dismissOnSelect]="true">
+            <ng-template>
+              <ion-content class="ion-padding">
+                <ion-list>
+                  <ion-item (click)="gotoProfile()">
+                    <ion-icon name="person-outline" id="click-trigger"></ion-icon>
+                    <ion-label>View Profile</ion-label>
+                  </ion-item>
+                  <ion-item (click)="logout()">
+                    <ion-icon name="power-outline" ></ion-icon>
+                    <ion-label>Logout</ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-content>
+            </ng-template>
+          </ion-popover>
+        </ion-title>
+      </ion-col>
+    </ion-row>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-  <h2>Goto home</h2>
-  <ion-button (click)="gotoHome()">Home</ion-button>
-  <ion-card>
-    <ion-row>
-      <ion-col>
-        <ion-input [(ngModel)]="textmessage"></ion-input>
-        <ion-button (click)="sendMessage()">Send</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-
-  <ion-row>
-    <ion-col size="12">
-      <p *ngFor="let item of messages">
-        {{item}}
-      </p>
+  <ion-row class="mt-10">
+    <ion-col size="12" *ngFor="let item of allUsers">
+      <div class="userCard" (click)="gotoChat(item)">
+        <div class="img">
+          <ion-img [src]="item.image" *ngIf="item.image else noImage"
+          ></ion-img>
+          <ng-template #noImage>
+            <ion-img src="assets/userprofile.png"
+          ></ion-img>
+          </ng-template>
+        </div>
+        <p class="m0">{{item.name}}</p>
+      </div>
     </ion-col>
   </ion-row>
-    
- 
 </ion-content>
+

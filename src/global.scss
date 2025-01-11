@@ -39,6 +39,9 @@
 .text_center{
     text-align: center;
 }
+.mt-10{
+    margin-top: 10px;
+}
 .mt-130{
     margin-top: 130px;
 }
@@ -81,4 +84,32 @@
 }
 .redirectbtn{
     --background: var(--primary_col);
+}
+.text_end{
+    text-align: end;
+}
+.m0{
+    margin: 0;
+}
+.p0{
+    padding: 0;
+}
+.pl-5{
+    padding-left: 10px;
+}
+.backbtn{
+    font-size: 28px;
+}
+.profile_img{
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+.sendIcons{
+    border-radius: 10px;
+    font-size: 30px;
+    color: var(--second_col);
+    background: var(--primary_col);
+    width: 100%;
+    height: 100%;
 }
