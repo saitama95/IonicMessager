@@ -24,6 +24,10 @@ export class ChatPage implements OnInit {
   firstMessage:boolean=false;
   unique_id:string="";
 
+  // pagination
+  page=1;
+  last_page = 0;
+
   constructor(
     private router:Router,
     private route:ActivatedRoute,
@@ -51,16 +55,25 @@ export class ChatPage implements OnInit {
   } 
 
   async getUserMessages(receiver_id:any) {
+    if(this.page>2){
+      if(this.last_page<this.page) return;
+    }
     let {user_id} = await this.storage.get("login");
     this.sender_id = user_id;
     let data = {
       sender_id:user_id,
       receiver_id
     }
-    this.http.httpHeader(`http://127.0.0.1:8000/api/getAllmessage?page=1`,data)
+    this.http.httpHeader(`http://127.0.0.1:8000/api/getAllmessage?page=${this.page}`,data)
     .subscribe({
       next:(res:any)=>{
-        this.allMessages.push(...res.data.data);
+        this.last_page = res.data.last_page;
+        if(this.page==1){
+          this.allMessages.push(...res.new);
+        }else{
+          this.allMessages.unshift(...res.new);
+        }
+        this.page++;
       },
     })
   }
