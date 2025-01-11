@@ -16,6 +16,7 @@ export class LoginPage implements OnInit {
   passwordType=false;
   loginError=false;
   loginForm:FormGroup;
+  loginloading = false;
   constructor(
     private router:Router,
     private fb: FormBuilder,
@@ -42,11 +43,13 @@ export class LoginPage implements OnInit {
   
  
   login(){
+    this.loginloading = true;
       this.http.postHttp("http://127.0.0.1:8000/api/login",this.loginForm.value)
       .subscribe({
         next:(res:any)=>{
           this.storage.set("login",res);
           this.stateMange.tokenState$.next(res);
+          this.loginloading = false;
           this.router.navigate(["/home"]);
         },
         error:(e)=>{

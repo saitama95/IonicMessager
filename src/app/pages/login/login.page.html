@@ -36,8 +36,13 @@
                 <ion-button 
                 class="loginbtn"
                 type="Submit" 
-                [disabled]="loginForm.invalid"
-                >Submit</ion-button>
+                [disabled]="loginForm.invalid || loginloading"
+                >
+                <span *ngIf="!loginloading else showloading">Submit</span>
+                <ng-template #showloading>
+                  <ion-spinner name="lines-sharp-small"></ion-spinner>
+                </ng-template>
+              </ion-button>
               </div>
             </ion-list>
         </ion-card>
