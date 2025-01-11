@@ -34,13 +34,16 @@
     
               <div class="btn">
                 <ion-button 
+                shape="round"
                 class="loginbtn"
                 type="Submit" 
                 [disabled]="loginForm.invalid || loginloading"
                 >
                 <span *ngIf="!loginloading else showloading">Submit</span>
                 <ng-template #showloading>
-                  <ion-spinner name="lines-sharp-small"></ion-spinner>
+                  <span>
+                    <ion-spinner name="lines-sharp-small"></ion-spinner>
+                  </span>
                 </ng-template>
               </ion-button>
               </div>

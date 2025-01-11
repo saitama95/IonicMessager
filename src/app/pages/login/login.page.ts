@@ -50,9 +50,11 @@ export class LoginPage implements OnInit {
           this.storage.set("login",res);
           this.stateMange.tokenState$.next(res);
           this.loginloading = false;
+          this.loginError=false;
           this.router.navigate(["/home"]);
         },
         error:(e)=>{
+          this.loginloading = false;
           this.loginError=true;
         }
       })
