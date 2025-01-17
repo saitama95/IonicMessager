@@ -18,7 +18,7 @@ export class HomePage implements OnInit  {
   textmessage = "";
   messagEcho:any;
   constructor(
-    
+    @Inject('APP_URL') private appUrl: string,
     private router:Router,
     private http:HttpService,
     private storage:StorageService,
@@ -40,10 +40,20 @@ export class HomePage implements OnInit  {
       user_id,
     }
     this.userid = user_id;
-    this.http.httpHeader(`http://127.0.0.1:8000/api/users`,data)
+    this.http.httpHeader(`${this.appUrl}/api/users`,data)
     .subscribe({
       next:(res:any)=>{
         this.allUsers = this.allUsers.concat(res.users)
+      },
+      error:(e:any)=>{
+        console.log(e);
+      },
+      complete:()=>{
+        let allUser  = [...this.allUsers,{id:user_id,online:false}]
+        allUser.map((item:any)=>{
+           item.id.toString();
+          this.http.createUser(item);
+        })
       }
     })
   }
@@ -53,7 +63,7 @@ export class HomePage implements OnInit  {
     let data = {
       message:this.textmessage
     }
-    this.http.postHttp(`http://127.0.0.1:8000/api/sendmessage`,data).subscribe(()=>{
+    this.http.postHttp(`${this.appUrl}/api/sendmessage`,data).subscribe(()=>{
       this.textmessage="";
     })
   }
@@ -70,7 +80,7 @@ export class HomePage implements OnInit  {
 
 
   logout(){
-    this.http.httpHeader(`http://127.0.0.1:8000/api/logout`,"")
+    this.http.httpHeader(`${this.appUrl}/api/logout`,"")
     .subscribe({
       next:(res:any)=>{
         this.storage.set("login","").then(()=>{

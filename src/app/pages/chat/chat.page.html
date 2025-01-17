@@ -14,8 +14,8 @@
           </ng-template>
         </div>
         <div>
-          <p class="m0">{{profileName}}</p>
-          <span>Online</span>
+          <p class="m0 first_letter">{{profileName}}</p>
+          <span *ngIf="onlineStatus" style="color: green;">{{onlineStatus ? 'Online':''}}</span>
         </div>
       </ion-col>
     </ion-row>

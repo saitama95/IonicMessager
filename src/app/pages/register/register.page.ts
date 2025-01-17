@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {  Router } from '@angular/router';
 import { FormBuilder, Validators,FormGroup } from '@angular/forms';
 import { HttpService } from 'src/app/services/http.service';
-// import { SharedService } from 'src/app/service/shared.service';
-// import { StatemanageService } from 'src/app/service/statemanage.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
@@ -19,8 +17,10 @@ export class RegisterPage implements OnInit {
   confirmType=true;
   errorMessage:any[]=[];
   loginError="";
+  loginloading = false;
 
   constructor(
+    @Inject('APP_URL') private appUrl: string,
     private router:Router,
     private http:HttpService,
     private fb:FormBuilder,
@@ -29,17 +29,15 @@ export class RegisterPage implements OnInit {
     this.regsiterForm = this.fb.group({
       name:['',Validators.required],
       email:['',[Validators.required,Validators.email]],
-      password:['',[Validators.required,Validators.minLength(2)]],
-      confirmpassword:['',[Validators.required,Validators.minLength(2)]]
+      password:['',[Validators.required,Validators.minLength(6)]],
+      confirmpassword:['',[Validators.required,Validators.minLength(6)]]
     },{
       validators:this.passwordMatchValidator
     })
   }
 
   ngOnInit() {
-    // this.stateManage.dataLogin.subscribe(res=>{
-    //   console.log(res);
-    // })
+    
   }
 
   passwordMatchValidator(form: FormGroup) {
@@ -54,13 +52,20 @@ export class RegisterPage implements OnInit {
 
   register(){
     this.loginError="";
-    this.http.postHttp("http://127.0.0.1:8000/api/register",this.regsiterForm.value)
+    this.loginloading = true;
+    this.http.postHttp(`${this.appUrl}/api/register`,this.regsiterForm.value)
     .subscribe({
       next:(res:any)=>{
+        this.loginloading = false;
         this.loginError="Register Successful";
       },
       error:(e:any)=>{
-        this.loginError="Invalid details"
+        this.loginloading = false;
+        if(e.error.errors.email[0]){
+          this.loginError = e.error.errors.email[0];
+        }else{
+          this.loginError="Invalid details"
+        }
       }
     })
   }

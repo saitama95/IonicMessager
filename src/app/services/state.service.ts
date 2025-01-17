@@ -9,5 +9,6 @@ export class StateService {
   constructor() { }
 
   tokenState$ = new BehaviorSubject<any>(null);
-   userprofile$ = new BehaviorSubject<any>(null);
+  userprofile$ = new BehaviorSubject<any>(null);
+  userStatus$ = new BehaviorSubject<any>(null);
 }

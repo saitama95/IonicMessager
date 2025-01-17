@@ -1,17 +1,18 @@
-import { Component, OnInit, ViewChild, AfterViewChecked  } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewChecked, Inject  } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
+import { InfiniteScrollCustomEvent } from '@ionic/angular';
 
+// service
 import { StateService } from 'src/app/services/state.service';
 import { StorageService } from 'src/app/services/storage.service';
-import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { HttpService } from 'src/app/services/http.service';
 import { EchoServiceService } from 'src/app/services/echo-service.service';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
-  standalone:false
+  standalone:false,
 })
 export class ChatPage implements OnInit {
   @ViewChild(IonContent) content: IonContent | any;
@@ -23,12 +24,13 @@ export class ChatPage implements OnInit {
   sender_id:number=0;
   firstMessage:boolean=false;
   unique_id:string="";
-
+  onlineStatus:boolean=false;
   // pagination
   page=1;
   last_page = 0;
 
   constructor(
+    @Inject('APP_URL') private appUrl: string,
     private router:Router,
     private route:ActivatedRoute,
     private stateMange:StateService,
@@ -41,20 +43,37 @@ export class ChatPage implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((res:any)=>{
       this.receiver_id = res.id;
+      //this.updateOnlineStatus(true);
       this.allMessages=[];
       this.getUserMessages(res.id);
       setTimeout(() => {
+        //this.getReciverOnlineStatus(res.id);
         this.content.scrollToBottom();
       }, 1000);
     });
-    this.echoService.initizalApp().channel("chatchannel").listen("ChatEvent",(e:any)=>{
+    this.echoService.initizalApp().channel("chatchannel")
+      .listen("ChatEvent",(e:any)=>{
         this.allMessages.push(e.message);
         this.content.scrollToBottom(); 
     });
     this.getUserFromLocal();
   } 
 
-  async getUserMessages(receiver_id:any) {
+  getReciverOnlineStatus(receiver_id:number){
+      this.http.getOnlineStatus(receiver_id).subscribe((res:any)=>{
+        this.onlineStatus = res[0].online;
+        console.log(this.onlineStatus);
+      })
+  }
+
+  async updateOnlineStatus(status:boolean){
+    let {user_id} = await this.storage.get("login");
+    await this.http.updateActiveStatus(user_id,status);
+  }
+
+
+
+  async getUserMessages(receiver_id:any){
     if(this.page>2){
       if(this.last_page<this.page) return;
     }
@@ -64,7 +83,7 @@ export class ChatPage implements OnInit {
       sender_id:user_id,
       receiver_id
     }
-    this.http.httpHeader(`http://127.0.0.1:8000/api/getAllmessage?page=${this.page}`,data)
+    this.http.httpHeader(`${this.appUrl}/api/getAllmessage?page=${this.page}`,data)
     .subscribe({
       next:(res:any)=>{
         this.last_page = res.data.last_page;
@@ -73,13 +92,13 @@ export class ChatPage implements OnInit {
         }else{
           this.allMessages.unshift(...res.new);
         }
-        this.page++;
       },
     })
   }
 
   loadMessages(ev:any) {
     this.getUserMessages(this.receiver_id);
+    this.page++;
     setTimeout(() => {
       (ev as InfiniteScrollCustomEvent).target.complete();
     }, 1000);
@@ -109,12 +128,14 @@ export class ChatPage implements OnInit {
       receiver_id:this.receiver_id,
       firstMessage:this.firstMessage
     }
-    this.http.httpHeader(`http://127.0.0.1:8000/api/sendmessage`,data).subscribe((res:any)=>{
-        this.unique_id = res.unique_id;
-        this.textMessage =""
+    this.http.httpHeader(`${this.appUrl}/api/sendmessage`,data)
+      .subscribe((res:any)=>{
+      this.unique_id = res.unique_id;
+      this.textMessage =""
     })
   }
   back(){
+    this.updateOnlineStatus(false);
     this.router.navigate(["./home"]);
   }
 }

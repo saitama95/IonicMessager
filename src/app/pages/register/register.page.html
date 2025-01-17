@@ -2,7 +2,7 @@
   <ion-row>
     <ion-col size="12">
       <div class="container">
-        <h4 class="logtitle">Welcome to GOGO chat</h4>
+        <h4 class="logtitle">Welcome to FastMessage</h4>
         <ion-card>
           <ion-card-header>
             <ion-card-title>Register</ion-card-title>
@@ -58,10 +58,17 @@
     
               <div class="btn">
                 <ion-button 
+                shape="round"
                 class="loginbtn"
                 type="Submit" 
-                [disabled]="regsiterForm.invalid"
-                >SignUp</ion-button>
+                [disabled]="regsiterForm.invalid || loginloading">
+                <span *ngIf="!loginloading else showloading">SignUp</span>
+                <ng-template #showloading>
+                  <span>
+                    <ion-spinner name="lines-sharp-small"></ion-spinner>
+                  </span>
+                </ng-template>
+              </ion-button>
               </div>
             </ion-list>
           </form>

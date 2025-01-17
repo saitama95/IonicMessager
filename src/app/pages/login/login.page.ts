@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators,FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, NavController, Platform } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { HttpService } from 'src/app/services/http.service';
 import { StateService } from 'src/app/services/state.service';
 import { StorageService } from 'src/app/services/storage.service';
@@ -18,6 +18,7 @@ export class LoginPage implements OnInit {
   loginForm:FormGroup;
   loginloading = false;
   constructor(
+    @Inject('APP_URL') private appUrl: string,
     private router:Router,
     private fb: FormBuilder,
     private platform: Platform,
@@ -44,7 +45,7 @@ export class LoginPage implements OnInit {
  
   login(){
     this.loginloading = true;
-      this.http.postHttp("http://127.0.0.1:8000/api/login",this.loginForm.value)
+      this.http.postHttp(`${this.appUrl}/api/login`,this.loginForm.value)
       .subscribe({
         next:(res:any)=>{
           this.storage.set("login",res);
